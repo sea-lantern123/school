@@ -6,11 +6,14 @@ from PIL import Image, ImageDraw, ImageFont
 
 # ------------------- 0. 좌표 통합 -------------------
 NODE_COORDS = {}
+BASE_DIR = Path(__file__).parent  # building_pathfinder.py 위치 기준
+NODE_COORDS = {}
 for floor in range(1, 6):
-    json_path = Path(f"coords_floor{floor}.json")
+    json_path = BASE_DIR / f"coords_floor{floor}.json"
     if json_path.exists():
         with open(json_path, "r", encoding="utf-8") as f:
             NODE_COORDS.update(json.load(f))
+
 
 # ------------------- 1. 복도 및 계단 연결 -------------------
 corridors = {
