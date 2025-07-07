@@ -140,9 +140,8 @@ st.title("🏫 청명고 최단 경로 안내기")
 with st.expander("📋 가능한 공간 목록 보기"):
     st.write(", ".join(sorted(NODE_COORDS.keys())))
 #디버깅
-for f in range(1, 6):
-    img_path = BASE_DIR / f"floor{f}.png"
-    st.write(f"[DEBUG] {img_path} exists:", img_path.exists())
+images = draw_path_pil(path, NODE_COORDS)
+st.write("[DEBUG] 불러온 이미지 keys:", list(images.keys()))
 
 
 
