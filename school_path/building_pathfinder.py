@@ -102,13 +102,15 @@ def dijkstra(start, end):
     return path, dist[end]
 
 # ------------------- 4. 이미지에 경로 그리기 (PIL) -------------------
+BASE_DIR = Path(__file__).resolve().parent  # 현재 py 파일 기준 디렉토리
+
 def draw_path_pil(path, node_coords):
     images = {}
     draw_objs = {}
 
     # 이미지 불러오기 및 draw 객체 생성
     for f in range(1, 6):
-        img_path = Path(f"floor{f}.png")
+        img_path = BASE_DIR / f"floor{f}.png"
         if img_path.exists():
             images[f] = Image.open(img_path).convert("RGB")
             draw_objs[f] = ImageDraw.Draw(images[f])
@@ -129,6 +131,7 @@ def draw_path_pil(path, node_coords):
             draw_objs[f1].line((x1, y1, x2, y2), fill=(255, 0, 0), width=4)
 
     return images
+
 
 
 # ------------------- 5. Streamlit UI -------------------
