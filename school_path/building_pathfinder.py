@@ -139,6 +139,11 @@ st.set_page_config(page_title="청명고 최단 경로 안내", layout="wide")
 st.title("🏫 청명고 최단 경로 안내기")
 with st.expander("📋 가능한 공간 목록 보기"):
     st.write(", ".join(sorted(NODE_COORDS.keys())))
+#디버깅
+for f in range(1, 6):
+    img_path = BASE_DIR / f"floor{f}.png"
+    st.write(f"[DEBUG] {img_path} exists:", img_path.exists())
+
 
 
 start = st.text_input("출발지를 입력하세요 (예: 1-4)")
