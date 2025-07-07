@@ -109,17 +109,26 @@ def draw_path_pil(path, node_coords):
         if img_path.exists():
             images[f] = Image.open(img_path).convert("RGB")
 
-    for i in range(len(path)-1):
-        a, b = path[i], path[i+1]
-        f1, x1, y1 = node_coords[a]
-        f2, x2, y2 = node_coords[b]
-        if f1 == f2 and f1 in images:
-            draw = ImageDraw.Draw(images[f1])
-            draw.line((x1, y1, x2, y2), fill=(255, 0, 0), width=3)
-            draw.ellipse((x1-4, y1-4, x1+4, y1+4), fill=(0, 255, 0))
-            draw.text((x1+5, y1-10), a, fill=(255, 255, 255))
+    for i in range(len(path)):
+        current = path[i]
+        floor, x, y = node_coords[current]
+
+        if floor in images:
+            draw = ImageDraw.Draw(images[floor])
+            draw.ellipse((x - 4, y - 4, x + 4, y + 4), fill=(0, 255, 0))
+            draw.text((x + 5, y - 10), current, fill=(255, 255, 255))
+
+        # 선 그리기 (같은 층일 때만)
+        if i < len(path) - 1:
+            next_node = path[i + 1]
+            next_floor, nx, ny = node_coords[next_node]
+
+            if floor == next_floor and floor in images:
+                draw = ImageDraw.Draw(images[floor])
+                draw.line((x, y, nx, ny), fill=(255, 0, 0), width=3)
 
     return images
+
 
 # ------------------- 5. Streamlit UI -------------------
 st.set_page_config(page_title="청명고 최단 경로 안내", layout="wide")
