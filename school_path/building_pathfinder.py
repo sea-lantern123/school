@@ -102,27 +102,22 @@ def dijkstra(start, end):
     return path, dist[end]
 
 # ------------------- 4. 이미지에 경로 그리기 (PIL) -------------------
-BASE_DIR = Path(__file__).resolve().parent  # 현재 py 파일 기준 디렉토리
-
 def draw_path_pil(path, node_coords):
     images = {}
     draw_objs = {}
 
-    # 이미지 불러오기 및 draw 객체 생성
     for f in range(1, 6):
         img_path = BASE_DIR / f"floor{f}.png"
         if img_path.exists():
             images[f] = Image.open(img_path).convert("RGB")
             draw_objs[f] = ImageDraw.Draw(images[f])
 
-    # 노드 표시
     for node in path:
         floor, x, y = node_coords[node]
         if floor in draw_objs:
             draw_objs[floor].ellipse((x-4, y-4, x+4, y+4), fill=(0, 255, 0))
             draw_objs[floor].text((x+5, y-10), node, fill=(255, 255, 255))
 
-    # 선 연결 (같은 층에서만)
     for i in range(len(path)-1):
         a, b = path[i], path[i+1]
         f1, x1, y1 = node_coords[a]
@@ -132,18 +127,12 @@ def draw_path_pil(path, node_coords):
 
     return images
 
-
-
 # ------------------- 5. Streamlit UI -------------------
 st.set_page_config(page_title="청명고 최단 경로 안내", layout="wide")
-st.title("🏫 청명고 최단 경로 안내기")
-with st.expander("📋 가능한 공간 목록 보기"):
+st.title("\U0001F3EB 청명고 최단 경로 안내기")
+
+with st.expander("\U0001F4CB 가능한 공간 목록 보기"):
     st.write(", ".join(sorted(NODE_COORDS.keys())))
-#디버깅
-images = draw_path_pil(path, NODE_COORDS)
-st.write("[DEBUG] 불러온 이미지 keys:", list(images.keys()))
-
-
 
 start = st.text_input("출발지를 입력하세요 (예: 1-4)")
 end = st.text_input("도착지를 입력하세요 (예: 보건실)")
@@ -153,11 +142,10 @@ if start not in NODE_COORDS or end not in NODE_COORDS:
 else:
     path, cost = dijkstra(start, end)
     st.success(f"총 거리: {cost}")
-    st.markdown("➡️ **이동 경로**")
+    st.markdown("\u27A1\ufe0f **이동 경로**")
     st.markdown(" → ".join(path))
 
     images = draw_path_pil(path, NODE_COORDS)
     for floor, img in sorted(images.items()):
         st.subheader(f"{floor}층 경로")
         st.image(img, use_column_width=True)
-
