@@ -121,11 +121,16 @@ def draw_path_pil(path, node_coords):
 # ------------------- 5. Streamlit UI -------------------
 st.set_page_config(page_title="청명고 최단 경로 안내", layout="wide")
 st.title("🏫 청명고 최단 경로 안내기")
+with st.expander("📋 가능한 공간 목록 보기"):
+    st.write(", ".join(sorted(NODE_COORDS.keys())))
 
-start = st.selectbox("출발지", sorted(NODE_COORDS.keys()))
-end = st.selectbox("도착지", sorted(NODE_COORDS.keys()))
 
-if st.button("최단 경로 찾기"):
+start = st.text_input("출발지를 입력하세요 (예: 1-4)")
+end = st.text_input("도착지를 입력하세요 (예: 보건실)")
+
+if start not in NODE_COORDS or end not in NODE_COORDS:
+    st.error("입력한 출발지 또는 도착지가 유효하지 않습니다.")
+else:
     path, cost = dijkstra(start, end)
     st.success(f"총 거리: {cost}")
     st.markdown("➡️ **이동 경로**")
